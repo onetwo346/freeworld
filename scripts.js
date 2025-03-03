@@ -1,50 +1,9 @@
-// WebRTC Peer Connection Setup
-let peerConnection;
-let dataChannel;
 let localIP;
-
-function initializePeerConnection() {
-    const configuration = {
-        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] // STUN server for NAT traversal
-    };
-    peerConnection = new RTCPeerConnection(configuration);
-
-    // Create data channel for messaging
-    dataChannel = peerConnection.createDataChannel('chat');
-    dataChannel.onmessage = (event) => {
-        const chatBox = document.getElementById('chatBox');
-        chatBox.value += `Peer: ${event.data}\n`;
-    };
-    dataChannel.onopen = () => {
-        document.getElementById('connectionStatus').textContent = 'Connected to peer!';
-    };
-    dataChannel.onclose = () => {
-        document.getElementById('connectionStatus').textContent = 'Connection closed.';
-    };
-
-    // Handle ICE candidates
-    peerConnection.onicecandidate = (event) => {
-        if (event.candidate) {
-            console.log('ICE Candidate:', event.candidate);
-            // In a real app, send this to the peer via signaling (manual for now)
-            alert('Share this ICE candidate with your peer: ' + JSON.stringify(event.candidate));
-        }
-    };
-
-    // Handle incoming data channel
-    peerConnection.ondatachannel = (event) => {
-        dataChannel = event.channel;
-        dataChannel.onmessage = (event) => {
-            const chatBox = document.getElementById('chatBox');
-            chatBox.value += `Peer: ${event.data}\n`;
-        };
-    };
-}
 
 // Detect IP using WebRTC
 function detectIP() {
     const pc = new RTCPeerConnection({ iceServers: [] });
-    pc.createDataChannel(''); // Dummy channel
+    pc.createDataChannel('');
     pc.createOffer()
         .then(offer => pc.setLocalDescription(offer))
         .catch(err => console.error(err));
@@ -62,60 +21,89 @@ function detectIP() {
     };
 }
 
-// Login Functionality
+// Generate a one-time cosmic code
+function generateCode() {
+    const existingCode = localStorage.getItem(`codeForIP_${localIP}`);
+    if (existingCode) {
+        document.getElementById('status').textContent = `Your existing Cosmic ID is: ${existingCode}. Use it to log in!`;
+        document.getElementById('cosmicCode').value = existingCode;
+        return;
+    }
+
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let code = 'COSMIC-';
+    for (let i = 0; i < 6; i++) {
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    localStorage.setItem(`codeForIP_${localIP}`, code); // Tie code to IP
+    document.getElementById('cosmicCode').value = code;
+    document.getElementById('status').textContent = `Generated: ${code}. SAVE THIS CODE! It’s your ID!`;
+}
+
+// Check if IP already has a code
+function checkIPForCode() {
+    const savedCode = localStorage.getItem(`codeForIP_${localIP}`);
+    if (savedCode) {
+        document.getElementById('status').textContent = `Welcome back! Your Cosmic ID is: ${savedCode}. Enter it to log in.`;
+        document.getElementById('cosmicCode').value = savedCode;
+    }
+}
+
+// Login logic
 function login() {
-    const cosmicCode = document.getElementById('cosmicCode').value;
-    if (cosmicCode) {
-        localStorage.setItem('cosmicCode', cosmicCode);
-        localStorage.setItem('userIP', localIP);
+    const enteredCode = document.getElementById('cosmicCode').value;
+    const savedCode = localStorage.getItem(`codeForIP_${localIP}`);
+    
+    if (!savedCode && enteredCode) {
+        localStorage.setItem(`codeForIP_${localIP}`, enteredCode); // First-time save
+        localStorage.setItem('currentUser', enteredCode);
+        window.location.href = 'profile.html';
+    } else if (enteredCode === savedCode) {
+        localStorage.setItem('currentUser', enteredCode);
         window.location.href = 'profile.html';
     } else {
-        alert('Please enter a cosmic code!');
+        document.getElementById('status').textContent = 'Invalid Cosmic ID! Use your generated code or generate a new one.';
     }
 }
 
-// Load Profile Data
+// Load profile data
 function loadProfile() {
-    const username = localStorage.getItem('cosmicCode') || 'Cosmic Traveler';
-    const userIP = localStorage.getItem('userIP') || 'Unknown';
-    document.getElementById('username').textContent = username;
-    document.getElementById('userIP').textContent = userIP;
-
-    initializePeerConnection();
-    // Create and send offer (manual signaling for simplicity)
-    peerConnection.createOffer()
-        .then(offer => peerConnection.setLocalDescription(offer))
-        .then(() => {
-            alert('Share this SDP offer with your peer: ' + JSON.stringify(peerConnection.localDescription));
-        })
-        .catch(err => console.error(err));
+    const cosmicID = localStorage.getItem('currentUser') || 'Unknown';
+    const displayName = localStorage.getItem(`displayName_${cosmicID}`) || cosmicID;
+    document.getElementById('username').textContent = displayName;
+    document.getElementById('cosmicID').textContent = cosmicID;
+    document.getElementById('userIP').textContent = localIP || 'Unknown';
+    loadComments(cosmicID);
 }
 
-// Connect to Peer (Manual Signaling)
-function connectToPeer() {
-    const peerID = document.getElementById('peerID').value;
-    if (peerID) {
-        try {
-            const peerAnswer = JSON.parse(peerID); // Expecting SDP answer from peer
-            peerConnection.setRemoteDescription(new RTCSessionDescription(peerAnswer))
-                .catch(err => console.error(err));
-        } catch (e) {
-            alert('Invalid peer ID! Please enter a valid SDP answer.');
-        }
-    } else {
-        alert('Please enter a peer ID!');
+// Save display name
+function saveName() {
+    const cosmicID = localStorage.getItem('currentUser');
+    const newName = document.getElementById('displayName').value;
+    if (newName) {
+        localStorage.setItem(`displayName_${cosmicID}`, newName);
+        document.getElementById('username').textContent = newName;
+        document.getElementById('displayName').value = '';
     }
 }
 
-// Send Message via Data Channel
-function sendMessage() {
-    const message = document.getElementById('messageInput').value;
-    if (dataChannel && dataChannel.readyState === 'open') {
-        dataChannel.send(message);
-        const chatBox = document.getElementById('chatBox');
-        chatBox.value += `You: ${message}\n`;
-        document.getElementById('messageInput').value = '';
-    } else {
-        alert('No active peer connection!');
+// Post a comment
+function postComment() {
+    const cosmicID = localStorage.getItem('currentUser');
+    const displayName = localStorage.getItem(`displayName_${cosmicID}`) || cosmicID;
+    const comment = document.getElementById('commentInput').value;
+    if (comment) {
+        const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+        comments.push({ user: displayName, text: comment, date: new Date().toLocaleString() });
+        localStorage.setItem('comments', JSON.stringify(comments));
+        document.getElementById('commentInput').value = '';
+        loadComments(cosmicID);
     }
+}
+
+// Load comments
+function loadComments(cosmicID) {
+    const comments = JSON.parse(localStorage.getItem('comments') || '[]');
+    const commentBox = document.getElementById('commentBox');
+    commentBox.value = comments.map(c => `${c.user} (${c.date}): ${c.text}`).join('\n');
 }
