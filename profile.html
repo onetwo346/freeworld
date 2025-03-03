@@ -9,18 +9,18 @@
 <body class="cosmic-bg">
     <div class="profile-container">
         <h1>Welcome, <span id="username">Cosmic Traveler</span></h1>
-        <div class="profile-info">
-            <p>Your IP: <span id="userIP"></span></p>
-            <p>Status: <span id="status">Exploring the cosmos...</span></p>
+        <p>Your Cosmic ID: <span id="cosmicID"></span></p>
+        <p>Your IP: <span id="userIP"></span></p>
+        <div class="edit-name">
+            <h2>Edit Display Name</h2>
+            <input type="text" id="displayName" placeholder="Enter new display name">
+            <button onclick="saveName()" class="cosmic-btn">Save Name</button>
         </div>
-        <div class="social-features">
-            <h2>Cosmic Connections</h2>
-            <input type="text" id="peerID" placeholder="Enter peer ID to connect">
-            <button onclick="connectToPeer()" class="cosmic-btn">Connect</button>
-            <p id="connectionStatus">No active connections</p>
-            <textarea id="chatBox" readonly placeholder="Chat messages will appear here..."></textarea>
-            <input type="text" id="messageInput" placeholder="Send a cosmic message">
-            <button onclick="sendMessage()" class="cosmic-btn">Send</button>
+        <div class="comments">
+            <h2>Cosmic Comments</h2>
+            <textarea id="commentBox" readonly placeholder="Community comments..."></textarea>
+            <input type="text" id="commentInput" placeholder="Leave a comment">
+            <button onclick="postComment()" class="cosmic-btn">Post</button>
         </div>
     </div>
     <script src="script.js"></script>
