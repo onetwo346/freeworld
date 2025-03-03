@@ -8,14 +8,18 @@
 </head>
 <body class="cosmic-bg">
     <div class="login-container">
-        <h1>Enter Your Cosmic Code</h1>
-        <input type="text" id="cosmicCode" placeholder="Enter your unique code">
-        <button onclick="login()" class="cosmic-btn">Join Freeworld</button>
+        <h1>Join the Cosmic Freeworld</h1>
+        <p id="warning" style="color: #ff00ff;">First time? Generate your cosmic ID below. WARNING: Save this code—it’s your permanent username!</p>
+        <button onclick="generateCode()" class="cosmic-btn">Generate Cosmic ID</button>
+        <input type="text" id="cosmicCode" placeholder="Enter your cosmic ID">
+        <button onclick="login()" class="cosmic-btn">Enter Freeworld</button>
         <p id="ipDisplay">Detecting your cosmic coordinates...</p>
+        <p id="status" style="color: #00ffff;"></p>
     </div>
     <script src="script.js"></script>
     <script>
         detectIP(); // Start IP detection on page load
+        checkIPForCode(); // Check if IP already has a code
     </script>
 </body>
 </html>
