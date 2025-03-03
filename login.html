@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Code Gen</title>
+    <title>Freeworld - Login</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <button id="generateBtn">Generate Cosmic ID</button>
-    <input type="text" id="cosmicCode" placeholder="Your code here">
-    <p id="status"></p>
+<body class="cosmic-bg">
+    <div class="login-container">
+        <h1>Enter Your Cosmic Code</h1>
+        <input type="text" id="cosmicCode" placeholder="Enter your unique code">
+        <button onclick="login()" class="cosmic-btn">Join Freeworld</button>
+        <p id="ipDisplay">Detecting your cosmic coordinates...</p>
+    </div>
     <script src="script.js"></script>
     <script>
-        document.getElementById('generateBtn').addEventListener('click', generateCode);
+        detectIP(); // Start IP detection on page load
     </script>
 </body>
 </html>
