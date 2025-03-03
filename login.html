@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Freeworld - Login</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freeworld - Login</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body class="min-h-screen flex items-center justify-center">
-  <div class="text-center w-full max-w-md p-6">
-    <h1 class="text-4xl font-bold mb-4">Freeworld Login</h1>
-    <input id="code-input" class="w-full p-2 rounded bg-gray-900 text-white border border-purple-500" placeholder="Enter Your Code">
-    <button id="login-btn" class="mt-4 px-4 py-2 bg-purple-600 rounded hover:bg-purple-800">Login</button>
-    <button id="generate-btn" class="mt-2 px-4 py-2 bg-blue-600 rounded hover:bg-blue-800">Generate Code</button>
-    <p id="warning" class="mt-2 text-red-400 hidden">Save this code: <span id="generated-code"></span></p>
-  </div>
-  <script src="scripts.js"></script>
+<body class="cosmic-bg">
+    <div class="login-container">
+        <h1>Enter Your Cosmic Code</h1>
+        <input type="text" id="cosmicCode" placeholder="Enter your unique code">
+        <button onclick="login()" class="cosmic-btn">Join Freeworld</button>
+        <p id="ipDisplay">Detecting your cosmic coordinates...</p>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        detectIP(); // Start IP detection on page load
+    </script>
 </body>
 </html>
