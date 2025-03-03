@@ -1,0 +1,46 @@
+body {
+  background: linear-gradient(135deg, #1e1b4b, #3b0764, #881337);
+  animation: nebulaShift 20s infinite;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+@keyframes nebulaShift {
+  0% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+  100% { background-position: 0% 0%; }
+}
+
+.wormhole {
+  animation: wormhole 1s forwards;
+}
+
+@keyframes wormhole {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.orbital-menu {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+  animation: orbit 10s infinite linear;
+}
+
+@keyframes orbit {
+  0% { transform: translateX(-50%) rotate(0deg); }
+  100% { transform: translateX(-50%) rotate(360deg); }
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}
