@@ -1,8 +1,9 @@
+console.log("script.js loaded!");
+
 let localIP;
 let peerConnection;
 let dataChannel;
 
-// Detect IP using WebRTC
 function detectIP() {
     const pc = new RTCPeerConnection({ iceServers: [] });
     pc.createDataChannel('');
@@ -23,8 +24,8 @@ function detectIP() {
     };
 }
 
-// Generate a unique cosmic code
 function generateCode() {
+    console.log("generateCode called!");
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let code = 'COSMIC-';
     for (let i = 0; i < 6; i++) {
@@ -35,7 +36,6 @@ function generateCode() {
     document.getElementById('status').textContent = `Generated: ${code}. SAVE THIS—it’s your ID!`;
 }
 
-// Check if IP has a code
 function checkIPForCode() {
     const savedCode = localStorage.getItem(`codeForIP_${localIP || 'unknown'}`);
     if (savedCode) {
@@ -44,7 +44,6 @@ function checkIPForCode() {
     }
 }
 
-// Login with generated code
 function login() {
     const enteredCode = document.getElementById('cosmicCode').value;
     const savedCode = localStorage.getItem(`codeForIP_${localIP || 'unknown'}`);
@@ -63,7 +62,6 @@ function login() {
     }
 }
 
-// Load profile and start WebRTC
 function loadProfile() {
     const cosmicID = localStorage.getItem('currentUser') || 'Unknown';
     const displayName = localStorage.getItem(`displayName_${cosmicID}`) || cosmicID;
@@ -73,7 +71,6 @@ function loadProfile() {
     initializePeerConnection();
 }
 
-// Initialize WebRTC Peer Connection
 function initializePeerConnection() {
     const configuration = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
     peerConnection = new RTCPeerConnection(configuration);
@@ -109,7 +106,6 @@ function initializePeerConnection() {
         .catch(err => console.error(err));
 }
 
-// Connect to a peer
 function connectToPeer() {
     const peerID = document.getElementById('peerID').value;
     if (peerID) {
@@ -125,7 +121,6 @@ function connectToPeer() {
     }
 }
 
-// Send message via WebRTC
 function sendMessage() {
     const message = document.getElementById('messageInput').value;
     if (dataChannel && dataChannel.readyState === 'open') {
@@ -138,7 +133,6 @@ function sendMessage() {
     }
 }
 
-// Save display name
 function saveName() {
     const cosmicID = localStorage.getItem('currentUser');
     const newName = document.getElementById('displayName').value;
