@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Freeworld - Profile</title>
+    <title>Freeworld - Social Cosmos</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="cosmic-bg">
     <div class="profile-container">
         <h1>Welcome, <span id="username">Cosmic Traveler</span></h1>
-        <p>Your Cosmic ID: <span id="cosmicID"></span></p>
+        <p>Cosmic ID: <span id="cosmicID"></span></p>
         <p>Your IP: <span id="userIP"></span></p>
         <div class="edit-name">
             <h2>Edit Display Name</h2>
-            <input type="text" id="displayName" placeholder="Enter new display name">
-            <button onclick="saveName()" class="cosmic-btn">Save Name</button>
+            <input type="text" id="displayName" placeholder="Set your cosmic name">
+            <button onclick="saveName()" class="cosmic-btn">Save</button>
         </div>
-        <div class="comments">
-            <h2>Cosmic Comments</h2>
-            <textarea id="commentBox" readonly placeholder="Community comments..."></textarea>
-            <input type="text" id="commentInput" placeholder="Leave a comment">
-            <button onclick="postComment()" class="cosmic-btn">Post</button>
+        <div class="social-features">
+            <h2>Peer-to-Peer Cosmic Chat</h2>
+            <input type="text" id="peerID" placeholder="Paste peer’s SDP offer here">
+            <button onclick="connectToPeer()" class="cosmic-btn">Connect</button>
+            <p id="connectionStatus">No active connections</p>
+            <textarea id="chatBox" readonly placeholder="Chat with the cosmos..."></textarea>
+            <input type="text" id="messageInput" placeholder="Send a message">
+            <button onclick="sendMessage()" class="cosmic-btn">Send</button>
         </div>
     </div>
     <script src="script.js"></script>
     <script>
-        loadProfile(); // Load profile data on page load
+        loadProfile(); // Load profile and start WebRTC
     </script>
 </body>
 </html>
