@@ -3,8 +3,11 @@
     min-height: 100vh;
     color: #fff;
     font-family: 'Arial', sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .cosmic-bg::before {
@@ -23,16 +26,19 @@
     position: relative;
     z-index: 1;
     text-align: center;
-    padding: 50px;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
 }
 
 h1 {
-    font-size: 3em;
+    font-size: 2.5em;
     text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+    margin: 0.5em 0;
 }
 
 p {
-    font-size: 1.2em;
+    font-size: 1.1em;
 }
 
 .cosmic-btn {
@@ -40,10 +46,13 @@ p {
     border: none;
     padding: 10px 20px;
     color: #fff;
-    font-size: 1.1em;
+    font-size: 1em;
     cursor: pointer;
     border-radius: 5px;
+    margin: 5px;
     transition: all 0.3s;
+    width: 100%;
+    max-width: 200px;
 }
 
 .cosmic-btn:hover {
@@ -58,15 +67,22 @@ input, textarea {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
     border-radius: 5px;
-    width: 80%;
+    width: 100%;
     max-width: 400px;
+    box-sizing: border-box;
 }
 
 textarea {
-    height: 100px;
+    height: 120px;
     resize: none;
 }
 
-.social-features {
+.social-features, .edit-name {
     margin-top: 20px;
+}
+
+@media (max-width: 480px) {
+    h1 { font-size: 2em; }
+    .cosmic-btn { font-size: 0.9em; padding: 8px 16px; }
+    input, textarea { font-size: 0.9em; }
 }
